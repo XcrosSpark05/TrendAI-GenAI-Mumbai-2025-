@@ -29,3 +29,22 @@ def get_news_analysis(ticker):
         'down', 'loss', 'drop', 'fall',
         'decline', 'sell', 'bearish', 'risk', 'crash'
     ]
+
+    pos_count = sum(1 for word in positive_words if word in real_headlines.lower())
+    neg_count = sum(1 for word in negative_words if word in real_headlines.lower())
+
+    if pos_count == neg_count:
+        score = 0.0
+        sentiment = "Neutral"
+    elif pos_count > neg_count:
+        score = 0.5
+        sentiment = "Positive"
+    else:
+        score = -0.5
+        sentiment = "Negative"
+
+    return {
+        "sentiment": sentiment,
+        "headline": real_headlines[:200] + "...",
+        "score": score
+    }
