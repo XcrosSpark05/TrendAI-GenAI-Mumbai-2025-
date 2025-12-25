@@ -6,15 +6,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_real_news(ticker):
-    # Using the ticker directly in the search query makes it dynamic
+    
     print(f"🔍 News Agent: Searching Google News for {ticker}...")
     try:
-        # period='1d' gets news from the last 24 hours
+        
         google_news = GNews(language='en', country='IN', period='1d', max_results=3)
         news = google_news.get_news(ticker)
         
         if news:
-            # Join the top 3 headlines for the dynamic ticker
+            
             return " | ".join([item['title'] for item in news])
     except Exception as e:
         print(f"⚠️ News fetch failed for {ticker}: {e}")
@@ -30,7 +30,7 @@ def get_news_analysis(ticker):
     pos_count = sum(1 for word in positive_words if word in real_headlines.lower())
     neg_count = sum(1 for word in negative_words if word in real_headlines.lower())
     
-    # NEW NEUTRAL LOGIC: If positive and negative are balanced, or too few keywords
+   
     if pos_count == neg_count:
         score = 0.0
         sentiment = "Neutral"
@@ -48,5 +48,5 @@ def get_news_analysis(ticker):
     }
 
 if __name__ == "__main__":
-    # Test it with a dynamic input manually
+    
     print(get_news_analysis("TATA MOTORS"))
