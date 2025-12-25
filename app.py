@@ -6,9 +6,13 @@ import news_agent
 import orchestrator
 import google.generativeai as genai
 import os
+<<<<<<< HEAD
 import json # NEW: Needed for data formatting
 from dotenv import load_dotenv
 from lightweight_charts_v5 import lightweight_charts_v5_component # NEW: TradingView component
+=======
+from dotenv import load_dotenv
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
 
 # --- 1. INITIALIZE SESSION STATE ---
 if "messages" not in st.session_state:
@@ -44,8 +48,10 @@ STRICT OPERATING RULES:
 # --- 3. PAGE CONFIG & ENHANCED STYLING ---
 st.set_page_config(page_title="TrendSignal AI", layout="wide", initial_sidebar_state="expanded")
 
+# Unified professional CSS for cards, buttons, and metrics
 st.markdown("""
 <style>
+<<<<<<< HEAD
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; background-color: #020617; }
     div[data-testid="stMetric"] {
         background: linear-gradient(145deg, #0f172a, #020617);
@@ -65,6 +71,55 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+=======
+    /* Global Background and Text */
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; background-color: #020617; }
+
+    /* Metric Card Styling: Dark glass effect */
+    div[data-testid="stMetric"] {
+        background: linear-gradient(145deg, #0f172a, #020617);
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        transition: transform 0.2s ease;
+    }
+    div[data-testid="stMetric"]:hover { transform: translateY(-3px); border-color: #38bdf8; }
+
+    /* Fix Sidebar Styling */
+    section[data-testid="stSidebar"] { background: #0b0f14; border-right: 1px solid #1e2937; }
+    
+    /* Input Fixes */
+    input[type="text"] { background: #0f172a !important; color: #f1f5f9 !important; border: 1px solid #334155 !important; border-radius: 8px !important; }
+
+    /* Result Boxes */
+    .verdict-box {
+        background: #0f172a;
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid #1e293b;
+        border-left: 6px solid #38bdf8;
+        color: #e2e8f0;
+        margin-top: 15px;
+    }
+    .advisor-box {
+        background: rgba(34, 197, 94, 0.05);
+        padding: 20px;
+        border-radius: 12px;
+        border-left: 6px solid #22c55e;
+        color: #f0fdf4;
+        margin-top: 20px;
+    }
+
+    /* Tab and Chat Interface styling */
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
+    .stTabs [data-baseweb="tab"] { color: #94a3b8; font-weight: 600; }
+    .stTabs [data-baseweb="tab"][aria-selected="true"] { color: #38bdf8; border-bottom: 2px solid #38bdf8; }
+    .stChatMessage { background: #0f172a !important; border-radius: 10px !important; border: 1px solid #1e293b !important; }
+</style>
+""", unsafe_allow_html=True)
+
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
 # --- 4. SIDEBAR ---
 st.sidebar.header("Agent Swarm Control")
 user_ticker = st.sidebar.text_input("Enter Ticker Symbol", value="RELIANCE.NS").upper()
@@ -74,6 +129,7 @@ if st.sidebar.button("🗑️ Clear Chat"):
     st.session_state.messages = []
     st.rerun()
 
+<<<<<<< HEAD
 # --- 5. LIGHTWEIGHT CHART UTILITY ---
 def render_lightweight_chart(ticker):
     df, _ = tech_agent.get_stock_data(ticker)
@@ -124,13 +180,33 @@ def render_lightweight_chart(ticker):
         }],
         height=550
     )
+=======
+# --- 5. UTILITY FUNCTIONS ---
+def draw_candlestick(ticker):
+    df, _ = tech_agent.get_stock_data(ticker)
+    if df is None or df.empty: return None
+    df['SMA_50'] = df['Close'].rolling(50).mean()
+    fig = go.Figure([
+        go.Candlestick(x=df.index, open=df['Open'], high=df['High'], low=df['Low'], close=df['Close'], name="Market"),
+        go.Scatter(x=df.index, y=df['SMA_50'], line=dict(color="#f97316", width=2), name="50 SMA")
+    ])
+    fig.update_layout(template="plotly_dark", height=450, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                      xaxis_rangeslider_visible=False, margin=dict(l=0, r=0, t=20, b=0))
+    return fig
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
 
 def draw_gauge(score):
     fig = go.Figure(go.Indicator(
         mode="gauge+number", value=score,
+<<<<<<< HEAD
         gauge={"axis": {"range": [-1, 1]}, "bar": {"color": "white"},
                "steps": [{"range": [-1, -0.3], "color": "#ef4444"}, {"range": [0.3, 1], "color": "#22c55e"}]},
         title={"text": "Analyst Sentiment"}
+=======
+        gauge={"axis": {"range": [-1, 1], "tickcolor": "white"}, "bar": {"color": "white"},
+               "steps": [{"range": [-1, -0.3], "color": "#ef4444"}, {"range": [-0.3, 0.3], "color": "#475569"}, {"range": [0.3, 1], "color": "#22c55e"}]},
+        title={"text": "Analyst Sentiment", "font": {"size": 20}}
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
     ))
     fig.update_layout(template="plotly_dark", height=260, paper_bgcolor="rgba(0,0,0,0)")
     return fig
@@ -153,15 +229,26 @@ if st.sidebar.button("🚀 INITIATE SCAN"):
             }
 
         st.subheader(f"{user_ticker} — Market Summary")
+<<<<<<< HEAD
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Price", f"{stock_info['price']} {stock_info['currency']}", f"{stock_info['change_pct']}%")
         c2.metric("Open", stock_info['open'])
         c3.metric("Day High", stock_info['day_high'])
         c4.metric("Day Low", stock_info['day_low'])
+=======
+        
+        # Two-row grid layout for metrics
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Current Price", f"{stock_info['price']} {stock_info['currency']}", f"{stock_info['change_pct']}%")
+        c2.metric("Market Open", stock_info['open'])
+        c3.metric("Day Range (High)", stock_info['day_high'])
+        c4.metric("Day Range (Low)", stock_info['day_low'])
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
 
         c5, c6, c7, c8 = st.columns(4)
         c5.metric("Market Cap", f"₹ {round(stock_info['mkt_cap']/1e12,2)} T")
         c6.metric("P/E Ratio", round(stock_info['pe_ratio'], 2) if isinstance(stock_info['pe_ratio'], (int, float)) else "N/A")
+<<<<<<< HEAD
         c7.metric("52W High", stock_info['high_52'])
         c8.metric("52W Low", stock_info['low_52'])
 
@@ -171,18 +258,40 @@ if st.sidebar.button("🚀 INITIATE SCAN"):
         with tab2:
             st.metric("Trend Signal", tech_data["signal"])
             st.caption(tech_data["detail"])
+=======
+        c7.metric("52-Week High", stock_info['high_52'])
+        c8.metric("52-Week Low", stock_info['low_52'])
+
+        # Data Deep Dives
+        tab1, tab2, tab3, tab4 = st.tabs(["📉 Price Chart", "📊 Technical Swarm", "🧠 Intelligence Score", "📰 Contextual News"])
+        with tab1:
+            fig = draw_candlestick(user_ticker)
+            if fig: st.plotly_chart(fig, use_container_width=True)
+        with tab2:
+            st.write(f"### Current Trend: **{tech_data['signal']}**")
+            st.info(tech_data["detail"])
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
         with tab3:
             st.plotly_chart(draw_gauge(context_data["score"]), use_container_width=True)
         with tab4:
             for h in context_data["headline"].split("|"):
+<<<<<<< HEAD
                 with st.expander(f" 📰 {h[:80]}..."): st.write(h)
+=======
+                if h.strip():
+                    with st.expander(f" 📰 {h[:80]}..."): st.write(h)
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
 
         st.divider()
         st.subheader("Final Verdict")
         st.markdown(f"<div class='verdict-box'>{final_report}</div>", unsafe_allow_html=True)
 
     except Exception as e:
+<<<<<<< HEAD
         st.error(f"❌ Analysis failed: {e}")
+=======
+        st.error(f"❌ Swarm Analysis failed: {e}")
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
 
 # --- 7. CHATBOT INTERFACE ---
 st.divider()
@@ -205,7 +314,11 @@ if prompt := st.chat_input("Ask TrendAI about the current market position..."):
 
             try:
                 model = genai.GenerativeModel(model_name=LATEST_MODEL, system_instruction=SYSTEM_PROMPT)
+<<<<<<< HEAD
                 response = model.generate_content(f"DATA: {data_context}\n\nUSER: {prompt}")
+=======
+                response = model.generate_content(f"DATA CONTEXT: {data_context}\n\nUSER REQUEST: {prompt}")
+>>>>>>> 7d6e27d6fb27ba572adc1cd26479d97b1690f976
                 ai_response = response.text
             except Exception as e:
                 ai_response = f"System Error: {str(e)}"
