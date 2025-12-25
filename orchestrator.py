@@ -42,3 +42,8 @@ if response.status_code == 200:
     if 'candidates' in result:
         return result['candidates'][0]['content']['parts'][0]['text']
     return "AI returned no valid response"
+
+try:
+    response = requests.post(URL, headers=headers, data=json.dumps(payload))
+except Exception as e:
+    return f"System Error: {str(e)}"
