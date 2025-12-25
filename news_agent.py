@@ -17,3 +17,15 @@ def get_real_news(ticker):
         print(f"⚠️ News fetch failed for {ticker}: {e}")
 
     return "No recent live news found for this ticker."
+
+def get_news_analysis(ticker):
+    real_headlines = get_real_news(ticker)
+
+    positive_words = [
+        'up', 'gain', 'growth', 'partnership',
+        'profit', 'rise', 'buy', 'record', 'bullish'
+    ]
+    negative_words = [
+        'down', 'loss', 'drop', 'fall',
+        'decline', 'sell', 'bearish', 'risk', 'crash'
+    ]
