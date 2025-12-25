@@ -1,0 +1,21 @@
+# Base Framework
+streamlit
+
+# Data & Finance
+yfinance
+pandas
+numpy
+
+# Visualization
+plotly
+
+# Multi-Agent & AI (Gemini Integration)
+google-generativeai
+
+# Backend Communication
+fastapi
+uvicorn
+
+# Utilities
+python-dotenv
+datetime
