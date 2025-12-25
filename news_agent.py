@@ -48,3 +48,6 @@ def get_news_analysis(ticker):
         "headline": real_headlines[:200] + "...",
         "score": score
     }
+
+if __name__ == "__main__":
+    print(get_news_analysis("TATA MOTORS"))
