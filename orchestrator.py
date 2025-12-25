@@ -25,3 +25,20 @@ def run_orchestrator(tech_data, context_data):
     """
 
     return prompt_text
+
+
+payload = {
+    "contents": [{
+        "parts": [{"text": prompt_text}]
+    }]
+}
+
+headers = {'Content-Type': 'application/json'}
+response = requests.post(URL, headers=headers, data=json.dumps(payload))
+return response.text
+
+if response.status_code == 200:
+    result = response.json()
+    if 'candidates' in result:
+        return result['candidates'][0]['content']['parts'][0]['text']
+    return "AI returned no valid response"
